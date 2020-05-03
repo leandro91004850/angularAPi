@@ -1,3 +1,6 @@
+// modo de produção
 export const environment = {
-  production: true
+  production: true,
+  API: '/'
+
 };
