@@ -3,6 +3,8 @@ import { CursosService } from '../cursos.service';
 import { Curso } from '../curso';
 import { Observable, empty, Subject } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { BsModalService, ModalContainerComponent, BsModalRef } from 'ngx-bootstrap/modal';
+import { AlertModalComponent } from 'src/app/shared/alert-modal/alert-modal.component';
 
 @Component({
   selector: 'app-cursos-lista',
@@ -12,10 +14,12 @@ import { catchError, switchMap } from 'rxjs/operators';
 })
 export class CursosListaComponent implements OnInit {
 
+  bsModalRef: BsModalRef;
   cursos$: Observable<Curso[]>;
   error$ = new Subject<boolean>();
 
-  constructor(private service: CursosService) { }
+  constructor(private service: CursosService,
+    private modalService: BsModalService) { }
 
   ngOnInit() {
     this.Atualizar();
@@ -30,7 +34,8 @@ export class CursosListaComponent implements OnInit {
      // switchMap(),
       catchError(error => {
         console.error(error);
-        this.error$.next(true);
+        //this.error$.next(true);
+        this.handleError();
         return empty();
       })
     );
@@ -46,6 +51,14 @@ export class CursosListaComponent implements OnInit {
           //() => console.log('Obserservable completo!')
       );
   }
+
+    handleError(){
+      this.bsModalRef = this.modalService.show(AlertModalComponent);
+      this.bsModalRef.content.type = 'danger';
+      this.bsModalRef.content.message = 'Erro ao carregar cursos. Tente novamente mais tarde';
+
+    }
+
 }
 
 //10:51
