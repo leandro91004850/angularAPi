@@ -31,37 +31,18 @@ export class CursosListaComponent implements OnInit {
   Atualizar(){
     this.cursos$ = this.service.list()
     .pipe(
-     // map(),
-     // tap(),
-     // switchMap(),
       catchError(error => {
         console.error(error);
-        //this.error$.next(true);
         this.handleError();
         return empty();
       })
     );
-      this.service.list()
-        .pipe(
-          catchError(error => empty())
-        )
-      .subscribe(
-          dados => {
-            console.log(dados);
-          }
-          //error => console.error(error),
-          //() => console.log('Obserservable completo!')
-      );
+ 
   }
 
     handleError(){
       this.alertService.showAlertdanger('Erro ao carregar cursos. Tente novamente mais tarde');
-      //this.bsModalRef = this.modalService.show(AlertModalComponent);
-      //this.bsModalRef.content.type = 'danger';
-      //this.bsModalRef.content.message = 'Erro ao carregar cursos. Tente novamente mais tarde';
-
     }
 
 }
 
-//10:51
