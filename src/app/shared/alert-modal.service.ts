@@ -13,6 +13,7 @@ export enum AlertTypes{
 export class AlertModalService {
   constructor(private modalService: BsModalService) { }
 
+  
   private showAlert(message: string, type: AlertTypes){
       const bsModalRef: BsModalRef = this.modalService.show(AlertModalComponent);
       bsModalRef.content.type = type;
