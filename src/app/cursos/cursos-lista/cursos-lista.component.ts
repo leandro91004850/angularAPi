@@ -6,6 +6,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 import { BsModalService, ModalContainerComponent, BsModalRef } from 'ngx-bootstrap/modal';
 import { AlertModalComponent } from 'src/app/shared/alert-modal/alert-modal.component';
 import { AlertModalService } from 'src/app/shared/alert-modal.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cursos-lista',
@@ -20,8 +21,11 @@ export class CursosListaComponent implements OnInit {
   cursos$: Observable<Curso[]>;
   error$ = new Subject<boolean>();
 
-  constructor(private service: CursosService,
-    private alertService: AlertModalService) { }
+  constructor(
+    private service: CursosService,
+    private alertService: AlertModalService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.Atualizar();
@@ -42,6 +46,11 @@ export class CursosListaComponent implements OnInit {
 
     handleError(){
       this.alertService.showAlertdanger('Erro ao carregar cursos. Tente novamente mais tarde');
+    }
+
+
+    atualizar(id){
+      this.router.navigate(['editar', id], {relativeTo: this.route});
     }
 
 }

@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CursosService } from '../cursos.service';
 import { AlertModalService } from 'src/app/shared/alert-modal.service';
 import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cursos-form',
@@ -18,12 +20,44 @@ export class CursosFormComponent implements OnInit {
     private formulario: FormBuilder,
     private service: CursosService,
     private modal: AlertModalService,
-    private location: Location) { }
+    private location: Location,
+    private route: ActivatedRoute) { }
 
   ngOnInit(){
 
+    let registro = null;
+
+   /* this.route.params.subscribe(
+      (params: any) =>{
+        const id = params['id'];
+        console.log(id);
+        const curso$ = this.service.loadByID(id);
+        curso$.subscribe(curso =>{
+          registro = curso;
+          this.updateForm(curso);
+        });
+      }
+    );
+
+    console.log(registro);*/
+    
+    this.route.params
+    .pipe(
+      map((params: any) => params['id']),
+      switchMap(id =>  this.service.loadByID(id))
+    )
+    .subscribe(curso => this.updateForm(curso));
+  
     this.form = this.formulario.group({
+      id: [null],
       nome: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(250)]]
+    });
+  }
+
+  updateForm(curso){
+    this.form.patchValue({
+      id: curso.id,
+      nome: curso.nome
     });
   }
 
