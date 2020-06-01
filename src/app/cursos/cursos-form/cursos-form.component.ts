@@ -19,45 +19,17 @@ export class CursosFormComponent implements OnInit {
   constructor(
     private formulario: FormBuilder,
     private service: CursosService,
-    private modal: AlertModalService,
+    private modal: AlertModalService,    
     private location: Location,
     private route: ActivatedRoute) { }
 
   ngOnInit(){
-
-    let registro = null;
-
-   /* this.route.params.subscribe(
-      (params: any) =>{
-        const id = params['id'];
-        console.log(id);
-        const curso$ = this.service.loadByID(id);
-        curso$.subscribe(curso =>{
-          registro = curso;
-          this.updateForm(curso);
-        });
-      }
-    );
-
-    console.log(registro);*/
-    
-    this.route.params
-    .pipe(
-      map((params: any) => params['id']),
-      switchMap(id =>  this.service.loadByID(id))
-    )
-    .subscribe(curso => this.updateForm(curso));
   
-    this.form = this.formulario.group({
-      id: [null],
-      nome: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(250)]]
-    });
-  }
+    const curso = this.route.snapshot.data['curso'];
 
-  updateForm(curso){
-    this.form.patchValue({
-      id: curso.id,
-      nome: curso.nome
+    this.form = this.formulario.group({
+      id: [curso.id],
+      nome: [curso.nome, [Validators.required, Validators.minLength(3), Validators.maxLength(250)]]
     });
   }
 
