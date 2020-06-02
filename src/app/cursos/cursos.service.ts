@@ -29,4 +29,9 @@ export class CursosService {
     return this.http.post(this.API, curso).pipe(take(1));
   }
 
+  update(curso){
+    return this.http.put(`${this.API}/${curso.id}`, curso).pipe(take(1));
+  }
+
+  
 }
